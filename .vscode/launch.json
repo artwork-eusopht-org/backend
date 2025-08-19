@@ -1,0 +1,17 @@
+{
+    "version": "1.0.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "NodeJS: Run server.js",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/server.js",
+            "console": "integratedTerminal",
+            // "env": {
+            // }
+        }
+    ]
+}

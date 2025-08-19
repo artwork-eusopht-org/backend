@@ -1,0 +1,110 @@
+{
+	"info": {
+		"_postman_id": "ed20510d-8551-4fc1-859d-0fe2e120aa3d",
+		"name": "Template project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28567024"
+	},
+	"item": [
+		{
+			"name": "Get user data",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hYmVlbDFAeW9wbWFpbC5jb20iLCJpYXQiOjE3MDk1NTM4ODJ9.xT_4UQFsCawxlPv4fxXrVeBjnoNxwpR8B2KSBZ_ZC7E",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"nabeel1@yopamil.com\",\r\n    \"nmae\": \"nabeel 1\",\r\n    \"password\": \"nabeeleusopht\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/user/getUserData/nabeeleusopht@yopmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"user",
+						"getUserData",
+						"nabeeleusopht@yopmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"nabeel1@yopmail.com\",\r\n    \"name\": \"nabeel 1\",\r\n    \"password\": \"nabeeleusopht\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/user/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"user",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"nabeel1@yopmail.com\",\r\n    \"name\": \"nabeel 1\",\r\n    \"password\": \"nabeeleusopht\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/user/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
