@@ -2,6 +2,7 @@ const bycrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 
 const { getUserByEmail, createUser } = require("../services/userService")
+const { offerAccept } = require("./emailTemplate");
 
 module.exports = {
     signupUser: async (req, res) => {

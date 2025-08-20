@@ -26,6 +26,7 @@ app.get('/', function (req, res) {
 })
 
 app.use('/api', require('./rootRoute'))
+app.use('/uploads', express.static('uploads'));
 
 server.setTimeout(500000);
 console.log("💻 Server timeout", server.timeout);

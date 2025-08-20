@@ -1,87 +1,25 @@
 const bycrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
+const nodeMailer = require("nodemailer");
 
-const { getUserByEmail, createUser } = require("../services/artworksService")
+const { createArtworkService, getArtworksService, getSpecificArtworkService, createArtworkOfferService, fetchAllOffersService, respondArtWorkOfferService, getSpecificArtWorkOfferService } = require("../services/artworksService");
+const { offerAccept, offerReject, offerRecieved } = require('./emailTemplate');
 
 module.exports = {
     createArtwork: async (req, res) => {
-        const {  } = req.body;
-        const { full_name, user_type } = userData;
-        console.log("req body", req.body)
-
         try {
-            // check if user already exists
-            const getUserByEmailRes = await getUserByEmail(email)
-            console.log("getUserByEmailRes", getUserByEmailRes) ;
-            if (getUserByEmailRes.length > 0) {
-                return res.send({
-                    status: 400,
-                    message: "User already exists",
-                    data: []
-                })
-            };
-            const salt = await bycrypt.genSalt(10)
-            const hashedPassword = await bycrypt.hash(password, salt)
-            console.log("hashedPassword", hashedPassword)
-
-            const createUserRes = await createUser(full_name, email, hashedPassword)
-            console.log("createUserRes", createUserRes)
-
-            var token = jwt.sign({ email }, process.env.JWT_SECRET)
-
-            res.send({
-                status: 200,
-                message: "signupUser Api is working",
-                token
-            })
-        }
-        catch (e) {
-            console.log(e.message)
-            res.send({
-                status: 500,
-                message: e.message,
-            })
-        }
-    },
-    loginUser: async (req, res) => {
-        const { email, password } = req.body
-        console.log("req body", req.body)
-
-        try {
-            // get user by email
-            const getUserByEmailRes = await getUserByEmail(email)
-            console.log("getUserByEmailRes", getUserByEmailRes[0])
-
-            if (getUserByEmailRes.length === 0) {
-                return res.send({
-                    status: 401,
-                    message: "User not found",
-                    token: null
-                })
-            }
-
-            const checkPassword = await bycrypt.compare(password, getUserByEmailRes[0].password);
-            console.log("Test hash:", checkPassword);
-
-            if (!checkPassword) {
-                return res.send({
-                    status: 401,
-                    message: "Invalid password",
-                    token: null
-                })
-            }
-
-            // use userdata to create jwt token
-            var token = jwt.sign({ email }, process.env.JWT_SECRET)
-            // console.log("token", token)
+            const { title, artist, year, medium, dimensions, description, minPrice, offerStatus } = req.body;
+            console.log("req body", req.body)
+            const firstFileName = req.files[0].filename;
+            console.log("imageName", firstFileName); 
             
-            res.send({
-                user: getUserByEmailRes[0],
-                status: 200,
-                message: "Success",
-                token
-            })
+            const createArtWork = await createArtworkService(title, artist, year, medium, dimensions, firstFileName, description, minPrice, offerStatus)
+            // console.log("createArtWork", createArtWork)
 
+            res.send({
+                status: 200,
+                message: "Artwork Added",
+            })
         }
         catch (e) {
             console.log(e.message)
@@ -91,26 +29,23 @@ module.exports = {
             })
         }
     },
-    getUserData: async (req, res) => {
-        const email = req.params.email
-        console.log("req body", email)
-
+    getArtworks: async (req, res) => {
         try {
-            const serviceRes = await getUserByEmail(email)
-            console.log(serviceRes)
+            const artworkRes = await getArtworksService()
+            console.log(artworkRes)
 
-            if (serviceRes.length === 0) {
+            if (artworkRes.length === 0) {
                 return res.send({
                     status: 200,
-                    message: "User not found",
+                    message: "Artworks not found",
                     data: []
                 })
             }
 
             res.send({
                 status: 200,
-                message: "User found",
-                data: serviceRes
+                message: "ArtWorks found",
+                data: artworkRes
             })
 
         }
@@ -122,12 +57,143 @@ module.exports = {
             })
         }
     },
+    getspecificArtWork: async (req, res) => {
+        try {
+            const id = req.params.id;
+            console.log("Artwork ID:", id);
 
-    logoutUser: (req, res) => {
-        // In a real application, you would handle token invalidation here
-        res.send({
-            status: 200,
-            message: "User logged out successfully"
-        })
-    }
+            const artworkRes = await getSpecificArtworkService(id)
+            console.log(artworkRes)
+
+            if (artworkRes.length === 0) {
+                return res.send({
+                    status: 200,
+                    message: "Artworks not found",
+                    data: []
+                })
+            }
+
+            res.send({
+                status: 200,
+                message: "ArtWorks found",
+                data: artworkRes
+            })
+
+        }
+        catch (e) {
+            console.log(e.message)
+            res.send({
+                status: 500,
+                message: e.message,
+            })
+        }
+    },
+    makeArtWorkOffer: async (req, res) => {
+        try {
+            const { name, email, phone, offer, notes, art_id } = req.body;
+            console.log("req body", req.body)
+            
+            const createArtWorkOffer = await createArtworkOfferService(name, email, phone, offer, notes, art_id)
+            // console.log("createArtWork", createArtWork)
+
+            let transporter = nodeMailer.createTransport({
+                host: process.env.MAIL_HOST,
+                port: process.env.MAIL_PORT,
+                secure: false,
+                auth: { 
+                    user:process.env.MAIL_USER,
+                    pass: process.env.MAIL_PASS
+                }
+            });
+            
+            let html = offerRecieved(name, offer);
+            mailOptions = { from: process.env.MAIL_USER, to: [process.env.MAIL_USER, "umar.maqsood06@gmail.com"], subject: "Offer Received", html: html };
+            await transporter.sendMail(mailOptions);
+
+            res.send({
+                status: 200,
+                message: "Offer Submitted",
+            })
+        }
+        catch (e) {
+            console.log(e.message)
+            res.send({
+                status: 500,
+                message: "Please Try Again",
+            })
+        }
+    },
+    fetchAllOffers: async (req, res) => {
+        try {
+            const offersRes = await fetchAllOffersService()
+            console.log(offersRes)
+
+            if (offersRes.length === 0) {
+                return res.send({
+                    status: 200,
+                    message: "Offers not found",
+                    data: []
+                })
+            }
+
+            res.send({
+                status: 200,
+                message: "Offers found",
+                data: offersRes
+            })
+
+        }
+        catch (e) {
+            console.log(e.message)
+            res.send({
+                status: 500,
+                message: e.message,
+            })
+        }
+    },
+    respondArtWorkOffer: async (req, res) => {
+        try {
+            const { id, offer_status } = req.body;
+            console.log("req body", req.body)
+            
+            const acceptArtWorkOffer = await respondArtWorkOfferService(id, offer_status)
+            const offerDetails = await getSpecificArtWorkOfferService(id);
+            console.log("offerDetails", offerDetails[0].email)
+
+            let transporter = nodeMailer.createTransport({
+                host: process.env.MAIL_HOST,
+                port: process.env.MAIL_PORT,
+                secure: false,
+                auth: { 
+                    user:process.env.MAIL_USER,
+                    pass: process.env.MAIL_PASS
+                }
+            });
+
+            if(offer_status === "Accept"){
+                
+                let html = offerAccept(offerDetails[0].name,offerDetails[0].offer);
+                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email, "umar.maqsood06@gmail.com"], subject: "Offer Accepted", html: html };
+                await transporter.sendMail(mailOptions);
+            }
+            if(offer_status === "Reject"){
+                let html = offerReject(offerDetails[0].name,offerDetails[0].offer);
+                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email, "umar.maqsood06@gmail.com"], subject: "Offer Rejected", html: html };
+                await transporter.sendMail(mailOptions);
+            }
+
+            res.send({
+                status: 200,
+                message: "Offer "+ offer_status,
+            })
+        }
+        catch (e) {
+            console.log(e.message)
+            res.send({
+                status: 500,
+                message: "Please Try Again",
+            })
+        }
+    },
+
 }
