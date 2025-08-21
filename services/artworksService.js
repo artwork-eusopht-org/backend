@@ -106,5 +106,20 @@ module.exports = {
             );
         });
     },
+    updateArtWorkSoldService: (id) => {
+        return new Promise((resolve, reject) => {
+            pool.query(
+                `UPDATE artworks set sold = 'Yes', payment_status = 'Received' where id = ?`,
+                [id],
+                (error, results, fields) => {
+                    if (error) {
+                        console.log(error);
+                        return reject(error);
+                    }
+                    return resolve(results);
+                }
+            );
+        });
+    },
     
 }

@@ -2,7 +2,7 @@
 
 module.exports = {
 
-  offerAccept: (name,amount) => {
+  offerAccept: (name,amount,url) => {
     return `
     
     <!DOCTYPE html>
@@ -32,6 +32,7 @@ module.exports = {
               <div>
                 <p><strong>Hi ${name},</strong></p>
                 <p>Your offer is accepted please pay the amount AUD${amount} on below URL!</p>
+                <p><a href="${url}">Click here to complete your payment</a></p>
               </div>
               
               <div>

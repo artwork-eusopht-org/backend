@@ -9,6 +9,9 @@ const app = express()
 const cors = require("cors")
 const pool = require("./config/database");
 
+const stripeRoutes = require('./routes/stripeRoutes');
+app.use('/webhook', stripeRoutes);
+
 app.use(cors())
 app.use(express.json())
 

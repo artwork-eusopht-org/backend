@@ -4,6 +4,8 @@ const nodeMailer = require("nodemailer");
 
 const { createArtworkService, getArtworksService, getSpecificArtworkService, createArtworkOfferService, fetchAllOffersService, respondArtWorkOfferService, getSpecificArtWorkOfferService } = require("../services/artworksService");
 const { offerAccept, offerReject, offerRecieved } = require('./emailTemplate');
+const Stripe = require('stripe');
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 module.exports = {
     createArtwork: async (req, res) => {
@@ -107,7 +109,7 @@ module.exports = {
             });
             
             let html = offerRecieved(name, offer);
-            mailOptions = { from: process.env.MAIL_USER, to: [process.env.MAIL_USER, "umar.maqsood06@gmail.com"], subject: "Offer Received", html: html };
+            mailOptions = { from: process.env.MAIL_USER, to: [process.env.MAIL_USER], subject: "Offer Received", html: html };
             await transporter.sendMail(mailOptions);
 
             res.send({
@@ -158,6 +160,7 @@ module.exports = {
             
             const acceptArtWorkOffer = await respondArtWorkOfferService(id, offer_status)
             const offerDetails = await getSpecificArtWorkOfferService(id);
+            const artworkRes = await getSpecificArtworkService(offerDetails[0].art_id)
             console.log("offerDetails", offerDetails[0].email)
 
             let transporter = nodeMailer.createTransport({
@@ -172,13 +175,36 @@ module.exports = {
 
             if(offer_status === "Accept"){
                 
-                let html = offerAccept(offerDetails[0].name,offerDetails[0].offer);
-                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email, "umar.maqsood06@gmail.com"], subject: "Offer Accepted", html: html };
+                const session = await stripe.checkout.sessions.create({
+                    payment_method_types: ['card'],
+                    mode: 'payment',
+                    line_items: [
+                        {
+                            price_data: {
+                                currency: 'aud',
+                                unit_amount: offerDetails[0].offer * 100, // convert to cents
+                                product_data: {
+                                    name: artworkRes[0].title,
+                                    description: `Purchase of artwork: ${artworkRes[0].title}`,
+                                },
+                            },
+                            quantity: 1,
+                        },
+                    ],
+                    success_url: `${process.env.CLIENT_URL}/payment-success`,
+                    cancel_url: `${process.env.CLIENT_URL}/payment-cancelled`,
+                    metadata: {
+                        artworkId: artworkRes[0].id,
+                    },
+                });
+                    
+                let html = offerAccept(offerDetails[0].name,offerDetails[0].offer,session.url);
+                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email], subject: "Offer Accepted", html: html };
                 await transporter.sendMail(mailOptions);
             }
             if(offer_status === "Reject"){
                 let html = offerReject(offerDetails[0].name,offerDetails[0].offer);
-                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email, "umar.maqsood06@gmail.com"], subject: "Offer Rejected", html: html };
+                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email], subject: "Offer Rejected", html: html };
                 await transporter.sendMail(mailOptions);
             }
 
