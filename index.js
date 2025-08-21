@@ -21,12 +21,10 @@ const server = app.listen(port, function () {
     console.log(`The server is running on port ${port}`)
 })
 
-app.get('/', function (req, res) {
-    res.send({
-        status: 200,
-        message: "Server is running"
-    })
-})
+const uiPath = __dirname + "/dist";
+app.use(express.static(uiPath));
+app.get("/*", async (req, res) => { res.sendFile(uiPath + "/index.html"); });
+
 
 app.use('/api', require('./rootRoute'))
 app.use('/uploads', express.static('uploads'));
