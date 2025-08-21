@@ -21,13 +21,13 @@ const server = app.listen(port, function () {
     console.log(`The server is running on port ${port}`)
 })
 
+app.use('/api', require('./rootRoute'))
+app.use('/uploads', express.static('uploads'));
+
 const uiPath = __dirname + "/dist";
 app.use(express.static(uiPath));
 app.get("/*", async (req, res) => { res.sendFile(uiPath + "/index.html"); });
 
-
-app.use('/api', require('./rootRoute'))
-app.use('/uploads', express.static('uploads'));
 
 server.setTimeout(500000);
 console.log("💻 Server timeout", server.timeout);
