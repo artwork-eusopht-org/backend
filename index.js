@@ -24,7 +24,7 @@ const server = app.listen(port, function () {
 app.use('/api', require('./rootRoute'))
 app.use('/uploads', express.static('uploads'));
 
-const uiPath = __dirname + "/dist";
+const uiPath = __dirname + "/client/dist";
 app.use(express.static(uiPath));
 app.get("/*", async (req, res) => { res.sendFile(uiPath + "/index.html"); });
 
