@@ -3,6 +3,6 @@ node_modules
 build
 *.zip
 package-lock.json
-# .env
+.env
 
 uploads
