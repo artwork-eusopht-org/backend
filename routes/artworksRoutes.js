@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post("/add-artwork", upload.any(), createArtwork);
+router.post("/add-artwork", upload.none(), createArtwork);
 router.get("/", getArtworks);
 router.get("/get-artwork/fetch-all-offers", fetchAllOffers);
 router.get("/get-artwork/:id", getspecificArtWork);

@@ -10,12 +10,12 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 module.exports = {
     createArtwork: async (req, res) => {
         try {
-            const { title, artist, year, medium, dimensions, description, minPrice, offerStatus } = req.body;
+            const { title, artist, year, medium, dimensions, description, minPrice, offerStatus, image } = req.body;
             console.log("req body", req.body)
-            const firstFileName = req.files[0].filename;
-            console.log("imageName", firstFileName); 
+            // const firstFileName = req.files[0].filename;
+            // console.log("imageName", firstFileName); 
             
-            const createArtWork = await createArtworkService(title, artist, year, medium, dimensions, firstFileName, description, minPrice, offerStatus)
+            const createArtWork = await createArtworkService(title, artist, year, medium, dimensions, image, description, minPrice, offerStatus)
             // console.log("createArtWork", createArtWork)
 
             res.send({
