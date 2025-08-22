@@ -35,9 +35,9 @@ module.exports = {
                 <p><a href="${url}">Click here to complete your payment</a></p>
               </div>
               <div>
-                <p>Kind regards,</p>
-                <p>The Essence of Joy Exhibition Team</p>
-                <p>Judy Woods</p>
+                <p style="margin: 0; line-height: 1.2;">Kind regards,</p>
+                <p style="margin: 0; line-height: 1.2;">The Essence of Joy Exhibition Team</p>
+                <p style="margin: 0; line-height: 1.2;">Judy Woods</p>
               </div>
               
               </div>
@@ -80,9 +80,9 @@ module.exports = {
               </div>
               
               <div>
-                <p>Kind regards,</p>
-                <p>The Essence of Joy Exhibition Team</p>
-                <p>Judy Woods</p>
+                <p style="margin: 0; line-height: 1.2;">Kind regards,</p>
+                <p style="margin: 0; line-height: 1.2;">The Essence of Joy Exhibition Team</p>
+                <p style="margin: 0; line-height: 1.2;">Judy Woods</p>
               </div>
               
               </div>
@@ -125,9 +125,9 @@ module.exports = {
               </div>
               
               <div>
-                <p>Kind regards,</p>
-                <p>The Essence of Joy Exhibition Team</p>
-                <p>Judy Woods</p>
+                <p style="margin: 0; line-height: 1.2;">Kind regards,</p>
+                <p style="margin: 0; line-height: 1.2;">The Essence of Joy Exhibition Team</p>
+                <p style="margin: 0; line-height: 1.2;">Judy Woods</p>
               </div>
               
               </div>
