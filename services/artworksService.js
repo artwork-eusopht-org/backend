@@ -64,7 +64,7 @@ module.exports = {
     fetchAllOffersService: () => {
         return new Promise((resolve, reject) => {
             pool.query(
-                `SELECT a.*,o.offer,o.id as offer_id,o.name,o.email,o.phone,o.notes,o.created_at FROM offers o join artworks a on a.id = o.art_id  order by o.id`,
+                `SELECT a.*,o.offer,o.id as offer_id,o.name,o.email,o.phone,o.notes,o.created_at,o.offer_status FROM offers o join artworks a on a.id = o.art_id  order by o.id`,
                 [],
                 (error, results, fields) => {
                     if (error) {
