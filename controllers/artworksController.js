@@ -109,7 +109,7 @@ module.exports = {
             });
             
             let html = offerRecieved(name, offer);
-            mailOptions = { from: process.env.MAIL_USER, to: [process.env.MAIL_USER], subject: "Offer Received", html: html };
+            mailOptions = { from: process.env.MAIL_USER, to: [process.env.MAIL_USER,"umar.maqsood06@gmail.com"], subject: "Offer Received", html: html };
             await transporter.sendMail(mailOptions);
 
             res.send({
@@ -199,12 +199,12 @@ module.exports = {
                 });
                     
                 let html = offerAccept(offerDetails[0].name,offerDetails[0].offer,session.url);
-                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email], subject: "Offer Accepted", html: html };
+                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email, "umar.maqsood06@gmail.com"], subject: "Offer Accepted", html: html };
                 await transporter.sendMail(mailOptions);
             }
             if(offer_status === "Reject"){
                 let html = offerReject(offerDetails[0].name,offerDetails[0].offer);
-                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email], subject: "Offer Rejected", html: html };
+                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email,"umar.maqsood06@gmail.com"], subject: "Offer Rejected", html: html };
                 await transporter.sendMail(mailOptions);
             }
 
