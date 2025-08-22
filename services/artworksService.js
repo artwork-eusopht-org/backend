@@ -19,7 +19,7 @@ module.exports = {
     getArtworksService: () => {
         return new Promise((resolve, reject) => {
             pool.query(
-                `SELECT * FROM artworks WHERE status = 1`,
+                `SELECT a.*, COUNT(o.id) AS offer_count FROM artworks a LEFT JOIN offers o ON o.art_id = a.id WHERE a.status = 1 GROUP BY a.id;`,
                 [],
                 (error, results, fields) => {
                     if (error) {
