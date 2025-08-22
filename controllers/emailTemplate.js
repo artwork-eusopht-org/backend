@@ -34,12 +34,10 @@ module.exports = {
                 <p>Your offer is accepted please pay the amount AUD${amount} on below URL!</p>
                 <p><a href="${url}">Click here to complete your payment</a></p>
               </div>
-              
               <div>
-                <p>Warm Regards,</p>
-              </div>
-              <div>
-                <p>The ExhibitPro Team</p>
+                <p>Kind regards,</p>
+                <p>The Essence of Joy Exhibition Team</p>
+                <p>Judy Woods</p>
               </div>
               
               </div>
@@ -82,10 +80,9 @@ module.exports = {
               </div>
               
               <div>
-                <p>Warm Regards,</p>
-              </div>
-              <div>
-                <p>The ExhibitPro Team</p>
+                <p>Kind regards,</p>
+                <p>The Essence of Joy Exhibition Team</p>
+                <p>Judy Woods</p>
               </div>
               
               </div>
@@ -128,10 +125,9 @@ module.exports = {
               </div>
               
               <div>
-                <p>Warm Regards,</p>
-              </div>
-              <div>
-                <p>The ExhibitPro Team</p>
+                <p>Kind regards,</p>
+                <p>The Essence of Joy Exhibition Team</p>
+                <p>Judy Woods</p>
               </div>
               
               </div>
