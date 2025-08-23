@@ -83,7 +83,6 @@ module.exports = {
               </div>
               
               </div>
-      
              </div>
           </body>
       `
