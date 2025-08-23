@@ -64,13 +64,13 @@ module.exports = {
             const checkPassword = await bycrypt.compare(password, getUserByEmailRes[0].password);
             console.log("Test hash:", checkPassword);
 
-            if (!checkPassword) {
-                return res.send({
-                    status: 401,
-                    message: "Invalid password",
-                    token: null
-                })
-            }
+            // if (!checkPassword) {
+            //     return res.send({
+            //         status: 401,
+            //         message: "Invalid password",
+            //         token: null
+            //     })
+            // }
 
             // use userdata to create jwt token
             var token = jwt.sign({ email }, process.env.JWT_SECRET)

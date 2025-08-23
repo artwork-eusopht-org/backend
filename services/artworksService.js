@@ -1,21 +1,48 @@
 const pool = require("../config/database");
+const { insertAirtableRecord } = require("../lib/airtable");
+
 
 module.exports = {
     createArtworkService: (title, artist, year, medium, dimensions, image, description, price, offerStatus) => {
         return new Promise((resolve, reject) => {
             pool.query(
                 `INSERT INTO artworks (title, artist, year, medium, dimensions, description, price, image, offerStatus) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [title, artist, year, medium, dimensions, description, price, image, offerStatus ],
-                (error, results, fields) => {
+                [title, artist, year, medium, dimensions, description, price, image, offerStatus],
+                async (error, results, fields) => {
                     if (error) {
                         console.log(error);
                         return reject(error);
                     }
-                    return resolve(results);
+
+                    try {
+                        // Insert into Airtable as well
+                        await insertAirtableRecord(process.env.AIRTABLE_TABLE, {
+                            "External ID": results.id,   // keep MySQL ID reference
+                            id: results.id,
+                            title: title,
+                            artist: artist,
+                            year: year,
+                            medium: medium,
+                            dimensions: dimensions,
+                            description: description,
+                            price: price,
+                            // image: image || "",
+                            offerStatus: offerStatus
+                        });
+
+                        return resolve(results);
+                    } catch (err) {
+                        console.error("Airtable insert failed:", err.response?.data || err.message);
+                        // You might choose to still resolve MySQL insert, or reject here
+                        return reject(err);
+                    }
+
                 }
             );
+
         });
     },
+
     getArtworksService: () => {
         return new Promise((resolve, reject) => {
             pool.query(
@@ -50,7 +77,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             pool.query(
                 `INSERT INTO offers (art_id, name, email, phone, offer, notes, status) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                [art_id, name, email, phone, offer, notes, 1 ],
+                [art_id, name, email, phone, offer, notes, 1],
                 (error, results, fields) => {
                     if (error) {
                         console.log(error);
@@ -121,5 +148,5 @@ module.exports = {
             );
         });
     },
-    
+
 }
