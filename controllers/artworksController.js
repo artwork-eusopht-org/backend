@@ -198,13 +198,13 @@ module.exports = {
                     },
                 });
                     
-                let html = offerAccept(offerDetails[0].name,offerDetails[0].offer,session.url);
-                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email, "umar.maqsood06@gmail.com"], subject: "Offer Accepted", html: html };
+                let html = offerAccept(offerDetails[0].name,offerDetails[0].offer,session.url, artworkRes[0].title);
+                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email, "umar.maqsood06@gmail.com"], subject: `Offer Accepted – Complete Your Purchase of ${artworkRes[0].title}`, html: html };
                 await transporter.sendMail(mailOptions);
             }
             if(offer_status === "Reject"){
-                let html = offerReject(offerDetails[0].name,offerDetails[0].offer);
-                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email,"umar.maqsood06@gmail.com"], subject: "Offer Rejected", html: html };
+                let html = offerReject(offerDetails[0].name,offerDetails[0].offer, artworkRes[0].title);
+                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email,"umar.maqsood06@gmail.com"], subject: "Offer Response – A revised offer is Welcomed", html: html };
                 await transporter.sendMail(mailOptions);
             }
 
