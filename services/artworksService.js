@@ -1,5 +1,5 @@
 const pool = require("../config/database");
-const { insertAirtableRecord } = require("../lib/airtable");
+const { insertAirtableRecord, updateAirtableImage } = require("../lib/airtable");
 
 
 module.exports = {
@@ -15,10 +15,11 @@ module.exports = {
                     }
 
                     try {
+                        const newId = results.insertId;
                         // Insert into Airtable as well
-                        await insertAirtableRecord(process.env.AIRTABLE_TABLE, {
-                            "External ID": results.id,   // keep MySQL ID reference
-                            id: results.id,
+                       const airtableResp = await insertAirtableRecord(process.env.AIRTABLE_ARTWORK_TABLE, {
+                            // "External ID": newId,   // keep MySQL ID reference
+                            id: newId,
                             title: title,
                             artist: artist,
                             year: year,
@@ -26,9 +27,21 @@ module.exports = {
                             dimensions: dimensions,
                             description: description,
                             price: price,
-                            // image: image || "",
+                            // image: image,
                             offerStatus: offerStatus
                         });
+
+                        // const airtableRecordId = airtableResp.records[0].id;
+
+                        // // Now attach image (must be URL, not base64)
+                        // if (image) {
+                        // const imageResp = await updateAirtableImage(
+                        //     process.env.AIRTABLE_ARTWORK_TABLE,
+                        //     airtableRecordId,
+                        //     image
+                        // );
+                        // console.log("Image added to Airtable:", imageResp);
+                        // }
 
                         return resolve(results);
                     } catch (err) {
