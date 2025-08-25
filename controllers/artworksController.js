@@ -17,6 +17,7 @@ module.exports = {
             
             const createArtWork = await createArtworkService(title, artist, year, medium, dimensions, image, description, minPrice, offerStatus)
             // console.log("createArtWork", createArtWork)
+            // console.log("req files", req.files)
 
             res.send({
                 status: 200,
