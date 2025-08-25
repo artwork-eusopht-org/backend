@@ -23,7 +23,13 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage });
+const upload = multer({ 
+  storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // limit file size to 25MB
+    fieldSize: 5 * 1024 * 1024,
+  },
+ });
 
 router.post("/add-artwork", upload.none(), createArtwork);
 router.get("/", getArtworks);

@@ -197,13 +197,14 @@ module.exports = {
                         artworkId: artworkRes[0].id,
                     },
                 });
-                    
-                let html = offerAccept(offerDetails[0].name,offerDetails[0].offer,session.url, artworkRes[0].title);
+                let firstName = offerDetails[0].name.split(" ")[0];
+                let html = offerAccept(firstName,offerDetails[0].offer,session.url, artworkRes[0].title);
                 mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email, "umar.maqsood06@gmail.com"], subject: `Offer Accepted – Complete Your Purchase of ${artworkRes[0].title}`, html: html };
                 await transporter.sendMail(mailOptions);
             }
             if(offer_status === "Reject"){
-                let html = offerReject(offerDetails[0].name,offerDetails[0].offer, artworkRes[0].title);
+                let firstName = offerDetails[0].name.split(" ")[0];
+                let html = offerReject(firstName,offerDetails[0].offer, artworkRes[0].title);
                 mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email,"umar.maqsood06@gmail.com"], subject: "Offer Response – A revised offer is Welcomed", html: html };
                 await transporter.sendMail(mailOptions);
             }
