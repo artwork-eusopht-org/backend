@@ -9,5 +9,4 @@ const pool = createPool({
     connectionLimit: 500,
     // maxAllowedPacket: 256 * 1024 * 1024
 })
-
 module.exports = pool;
