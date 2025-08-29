@@ -14,7 +14,7 @@ module.exports = {
             console.log("req body", req.body)
             // const firstFileName = req.files[0].filename;
             // console.log("imageName", firstFileName); 
-            
+
             const createArtWork = await createArtworkService(title, artist, year, medium, dimensions, image, description, minPrice, offerStatus)
             // console.log("createArtWork", createArtWork)
 
@@ -94,7 +94,7 @@ module.exports = {
         try {
             const { name, email, phone, offer, notes, art_id } = req.body;
             console.log("req body", req.body)
-            
+
             const createArtWorkOffer = await createArtworkOfferService(name, email, phone, offer, notes, art_id)
             // console.log("createArtWork", createArtWork)
 
@@ -102,14 +102,14 @@ module.exports = {
                 host: process.env.MAIL_HOST,
                 port: process.env.MAIL_PORT,
                 secure: false,
-                auth: { 
-                    user:process.env.MAIL_USER,
+                auth: {
+                    user: process.env.MAIL_USER,
                     pass: process.env.MAIL_PASS
                 }
             });
-            
+
             let html = offerRecieved(name, offer);
-            mailOptions = { from: process.env.MAIL_USER, to: [process.env.MAIL_USER,"umar.maqsood06@gmail.com"], subject: "Offer Received", html: html };
+            mailOptions = { from: process.env.MAIL_USER, to: [process.env.MAIL_USER, "umar.maqsood06@gmail.com"], subject: "Offer Received", html: html };
             await transporter.sendMail(mailOptions);
 
             res.send({
@@ -157,7 +157,7 @@ module.exports = {
         try {
             const { id, offer_status } = req.body;
             console.log("req body", req.body)
-            
+
             const acceptArtWorkOffer = await respondArtWorkOfferService(id, offer_status)
             const offerDetails = await getSpecificArtWorkOfferService(id);
             const artworkRes = await getSpecificArtworkService(offerDetails[0].art_id)
@@ -167,14 +167,14 @@ module.exports = {
                 host: process.env.MAIL_HOST,
                 port: process.env.MAIL_PORT,
                 secure: false,
-                auth: { 
-                    user:process.env.MAIL_USER,
+                auth: {
+                    user: process.env.MAIL_USER,
                     pass: process.env.MAIL_PASS
                 }
             });
 
-            if(offer_status === "Accept"){
-                
+            if (offer_status === "Accept") {
+
                 const session = await stripe.checkout.sessions.create({
                     payment_method_types: ['card'],
                     mode: 'payment',
@@ -197,20 +197,20 @@ module.exports = {
                         artworkId: artworkRes[0].id,
                     },
                 });
-                    
-                let html = offerAccept(offerDetails[0].name,offerDetails[0].offer,session.url);
+
+                let html = offerAccept(offerDetails[0].name, offerDetails[0].offer, session.url);
                 mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email, "umar.maqsood06@gmail.com"], subject: "Offer Accepted", html: html };
                 await transporter.sendMail(mailOptions);
             }
-            if(offer_status === "Reject"){
-                let html = offerReject(offerDetails[0].name,offerDetails[0].offer);
-                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email,"umar.maqsood06@gmail.com"], subject: "Offer Rejected", html: html };
+            if (offer_status === "Reject") {
+                let html = offerReject(offerDetails[0].name, offerDetails[0].offer);
+                mailOptions = { from: process.env.MAIL_USER, to: [offerDetails[0].email, "umar.maqsood06@gmail.com"], subject: "Offer Rejected", html: html };
                 await transporter.sendMail(mailOptions);
             }
 
             res.send({
                 status: 200,
-                message: "Offer "+ offer_status,
+                message: "Offer " + offer_status,
             })
         }
         catch (e) {
@@ -221,5 +221,4 @@ module.exports = {
             })
         }
     },
-
 }

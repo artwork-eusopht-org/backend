@@ -4,9 +4,9 @@ const multer = require('multer');
 const path = require('path');
 // const app = express
 const router = express.Router()
-const { 
-  createArtwork, 
-  getArtworks, 
+const {
+  createArtwork,
+  getArtworks,
   getspecificArtWork,
   makeArtWorkOffer,
   fetchAllOffers,
