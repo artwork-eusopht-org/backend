@@ -11,7 +11,7 @@ module.exports = {
     
     stripeWebhook: async (req, res) => {
         const sig = req.headers['stripe-signature'];
-        const endpointSecret = 'whsec_VdnzBmCbDjWYEAHYAz8u6aWTh0e9D73u'; // Replace with your actual Stripe webhook secret whsec_LPkaQcN6826uARpnlDBfW8wxzEGID8nU
+        const endpointSecret = process.env.endpointSecret; // Replace with your actual Stripe webhook secret whsec_LPkaQcN6826uARpnlDBfW8wxzEGID8nU
 
         let event;
 
