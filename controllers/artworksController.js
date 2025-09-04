@@ -110,7 +110,8 @@ module.exports = {
             });
             
             let html = offerRecieved(name, offer);
-            mailOptions = { from: process.env.MAIL_USER, to: [process.env.MAIL_USER,"umar.maqsood06@gmail.com"], subject: "Offer Received", html: html };
+            mailOptions = { from: process.env.MAIL_USER, to: [process.env.MAIL_USER], subject: "Offer Received", html: html }; // NEW CODE
+            // OLD CODE   mailOptions = { from: process.env.MAIL_USER, to: [process.env.MAIL_USER,"umar.maqsood06@gmail.com"], subject: "Offer Received", html: html };
             await transporter.sendMail(mailOptions);
 
             res.send({
